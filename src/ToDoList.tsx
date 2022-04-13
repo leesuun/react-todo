@@ -94,7 +94,7 @@ function ToDoList() {
                     })}
                     type="text"
                 />
-                <span>{errors?.name?.message}</span>
+                {/* <span>{errors?.name?.message}</span> */}
                 <input
                     {...register("password", {
                         required: "write a password..",
@@ -108,7 +108,7 @@ function ToDoList() {
                     })}
                     type="text"
                 />
-                <span>{errors?.password1?.message}</span>
+                {/* <span>{errors?.password1?.message}</span> */}
                 <button>submit</button>
                 <span>{errors?.extraErr?.message}</span>
             </form>
