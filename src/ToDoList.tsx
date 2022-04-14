@@ -54,6 +54,8 @@ function ToDoList() {
         },
     });
 
+    console.log(register);
+
     const onVaild = (data: IForm) => {
         if (data?.password !== data?.password1) {
             setError(
