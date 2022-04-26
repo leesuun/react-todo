@@ -43,23 +43,34 @@ function CreateToDo() {
 */
 
 function ToDoList() {
-    const { register, handleSubmit, formState } = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
     const onValid = (data: any) => {
         console.log(data);
     };
-    console.log(formState.errors);
 
     return (
         <div>
             <form onSubmit={handleSubmit(onValid)}>
                 <input
                     placeholder="email"
-                    {...register("email", { required: true, minLength: 5 })}
+                    {...register("email", {
+                        required: "write here",
+                        minLength: {
+                            value: 5,
+                            message: "your email is too short",
+                        },
+                    })}
                 />
+                <span>{errors?.email?.message}</span>
                 <input
                     placeholder="name"
                     {...register("name", { required: true, minLength: 5 })}
+                    // Validate regExp option is pattern
                 />
                 <input
                     placeholder="password"
