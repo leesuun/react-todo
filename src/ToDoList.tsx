@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
+/*
 function CreateToDo() {
     const [toDo, setToDo] = useState([]);
     const [input, setInput] = useState("");
@@ -38,5 +40,24 @@ function CreateToDo() {
         </div>
     );
 }
+*/
 
-export default CreateToDo;
+function ToDoList() {
+    const { register, watch } = useForm();
+    console.log(watch("toDo"));
+
+    return (
+        <div>
+            <form>
+                <input
+                    type="text"
+                    placeholder="write a to do"
+                    {...register("toDo")}
+                />
+                <button>submit</button>
+            </form>
+        </div>
+    );
+}
+
+export default ToDoList;

@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import { Helmet } from "react-helmet";
-import CreateToDo from "./CreateToDo";
+import ToDoList from "./ToDoList";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -78,7 +78,7 @@ function App() {
 
             <GlobalStyle />
 
-            <CreateToDo />
+            <ToDoList />
         </>
     );
 }
