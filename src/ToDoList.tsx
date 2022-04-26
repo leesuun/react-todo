@@ -42,23 +42,53 @@ function CreateToDo() {
 }
 */
 
+interface IForm {
+    email?: string;
+    name: string;
+    password: string;
+    password1: string;
+    extraError?: string;
+}
+
 function ToDoList() {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+        setError,
+    } = useForm<IForm>({
+        defaultValues: {
+            email: "@naver.com",
+        },
+    });
 
-    const onValid = (data: any) => {
-        console.log(data);
+    const onValid = (data: IForm) => {
+        const { password, password1 } = data;
+        if (password !== password1) {
+            setError(
+                "password1",
+                { message: "password not match" },
+                { shouldFocus: true }
+            );
+        }
+        setError("extraError", { message: "Server died" });
     };
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onValid)}>
+            <form
+                style={{ display: "flex", flexDirection: "column" }}
+                onSubmit={handleSubmit(onValid)}
+            >
                 <input
                     placeholder="email"
                     {...register("email", {
+                        validate: {
+                            nonick: (value) =>
+                                value?.includes("nick")
+                                    ? "no nick allowed"
+                                    : true,
+                        },
                         required: "write here",
                         minLength: {
                             value: 5,
@@ -69,17 +99,18 @@ function ToDoList() {
                 <span>{errors?.email?.message}</span>
                 <input
                     placeholder="name"
-                    {...register("name", { required: true, minLength: 5 })}
+                    {...register("name", { required: true })}
                     // Validate regExp option is pattern
                 />
                 <input
                     placeholder="password"
-                    {...register("password", { required: true, minLength: 5 })}
+                    {...register("password", { required: true })}
                 />
                 <input
                     placeholder="password1"
-                    {...register("password1", { required: true, minLength: 5 })}
+                    {...register("password1", { required: true })}
                 />
+                <span>{errors?.password1?.message}</span>
 
                 <button>submit</button>
             </form>
