@@ -43,17 +43,33 @@ function CreateToDo() {
 */
 
 function ToDoList() {
-    const { register, watch } = useForm();
-    console.log(watch("toDo"));
+    const { register, handleSubmit, formState } = useForm();
+
+    const onValid = (data: any) => {
+        console.log(data);
+    };
+    console.log(formState.errors);
 
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit(onValid)}>
                 <input
-                    type="text"
-                    placeholder="write a to do"
-                    {...register("toDo")}
+                    placeholder="email"
+                    {...register("email", { required: true, minLength: 5 })}
                 />
+                <input
+                    placeholder="name"
+                    {...register("name", { required: true, minLength: 5 })}
+                />
+                <input
+                    placeholder="password"
+                    {...register("password", { required: true, minLength: 5 })}
+                />
+                <input
+                    placeholder="password1"
+                    {...register("password1", { required: true, minLength: 5 })}
+                />
+
                 <button>submit</button>
             </form>
         </div>
