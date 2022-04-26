@@ -1,53 +1,24 @@
-import { useForm } from "react-hook-form";
-import { atom, useRecoilState } from "recoil";
-
-// atom<{text: string, id: number, category: "TO_DO" | "DOING" | "DONE"}[]> 같음
-const toDoState = atom<IToDo[]>({
-    key: "toDo",
-    default: [],
-});
-
-interface IForm {
-    toDo: string;
-}
-
-interface IToDo {
-    text: string;
-    id: number;
-    category: "TO_DO" | "DOING" | "DONE";
-}
+import CreateToDo from "./CreateToDo";
+import ToDo from "./ToDo";
+import { toDoState } from "./atom";
+import { useRecoilValue } from "recoil";
 
 function ToDoList() {
-    // const toDos = useRecoilValue(toDoState);
+    const toDos = useRecoilValue(toDoState);
     // const setToDos = useSetRecoilState(toDoState);
-    const [toDos, setToDos] = useRecoilState(toDoState); // useState와 흡사함
-
-    const { register, setValue, handleSubmit } = useForm<IForm>();
-
-    const handleValid = (data: IForm) => {
-        console.log(data.toDo);
-        setToDos((prev) => [
-            { text: data.toDo, category: "TO_DO", id: Date.now() },
-            ...prev,
-        ]);
-        setValue("toDo", "");
-    };
-    console.log(toDos);
-
     return (
         <div>
             <h1>ToDo-List</h1>
             <hr />
-            <form onSubmit={handleSubmit(handleValid)}>
-                <input
-                    placeholder="write a todo.."
-                    {...register("toDo", { required: "Please write a todo" })}
-                />
-                <button>add</button>
-            </form>
+            <CreateToDo />
             <ul>
                 {toDos.map((toDo) => (
-                    <li key={toDo.id}>{toDo.text}</li>
+                    <ToDo key={toDo.id} {...toDo} />
+                    // <ToDo
+                    //     id={toDo.id}
+                    //     text={toDo.text}
+                    //     category={toDo.category}
+                    // />
                 ))}
             </ul>
         </div>
