@@ -12,7 +12,7 @@ function ToDoList() {
             <hr />
             <CreateToDo />
             <ul>
-                {toDos.map((toDo) => (
+                {toDos?.map((toDo) => (
                     <ToDo key={toDo.id} {...toDo} />
                     // <ToDo
                     //     id={toDo.id}
