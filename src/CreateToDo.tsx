@@ -25,7 +25,7 @@ function CreateToDo() {
                 placeholder="write a todo.."
                 {...register("toDo", { required: "Please write a todo" })}
             />
-            <button>add</button>
+            {/* <button>add</button> */}
         </form>
     );
 }
