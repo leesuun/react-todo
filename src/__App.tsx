@@ -67,19 +67,19 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-    return (
-        <>
-            <Helmet>
-                <link
+  return (
+    <>
+      <Helmet>
+        {/* <link
                     href="https://fonts.googleapis.com/css2?family=Readex+Pro&family=Rubik+Moonrocks&family=Source+Sans+Pro:wght@300;400&display=swap"
                     rel="stylesheet"
-                />
-            </Helmet>
+                /> */}
+      </Helmet>
 
-            <GlobalStyle />
-            <ToDoList />
-        </>
-    );
+      <GlobalStyle />
+      <ToDoList />
+    </>
+  );
 }
 
 export default App;
