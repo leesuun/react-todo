@@ -3,9 +3,8 @@ import "styled-components";
 
 // and extend them!
 declare module "styled-components" {
-    export interface DarkTheme {
-        bgColor: string;
-        textColor: string;
-        accentColor: string;
-    }
+  export interface DefaultTheme {
+    bgColor: string[];
+    textColor: string;
+  }
 }

@@ -1,6 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { Helmet } from "react-helmet";
-import ToDoList from "./ToDoList";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { LightTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -58,6 +57,9 @@ body{
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
     line-height: 1.2;
+    background: fixed radial-gradient(${(props) =>
+      [...props.theme.bgColor].join()});
+    
 }
 
 a{
@@ -67,20 +69,13 @@ a{
 `;
 
 function App() {
-    return (
-        <>
-            <Helmet>
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Readex+Pro&family=Rubik+Moonrocks&family=Source+Sans+Pro:wght@300;400&display=swap"
-                    rel="stylesheet"
-                />
-            </Helmet>
-
-            <GlobalStyle />
-
-            <ToDoList />
-        </>
-    );
+  return (
+    <>
+      <ThemeProvider theme={LightTheme}>
+        <GlobalStyle />
+      </ThemeProvider>
+    </>
+  );
 }
 
 export default App;
