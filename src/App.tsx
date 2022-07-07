@@ -10,6 +10,7 @@ import {
 } from "react-beautiful-dnd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { toDoState } from "./atoms";
+import Boards from "./components/Boards";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -166,28 +167,10 @@ function App() {
             </Options>
           </Header>
           <Main>
+            {" "}
             <DragDropContext onDragEnd={onDragEnd}>
               {Object.keys(toDos).map((toDo) => (
-                <Droppable key={toDo} droppableId={toDo}>
-                  {(provided, snapshot) => (
-                    <div ref={provided.innerRef}>
-                      {toDos[toDo].map((text, index) => (
-                        <Draggable key={text} index={index} draggableId={text}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.dragHandleProps}
-                              {...provided.draggableProps}
-                            >
-                              {text}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
+                <Boards key={toDo} toDo={toDo} toDos={toDos} />
               ))}
             </DragDropContext>
           </Main>
