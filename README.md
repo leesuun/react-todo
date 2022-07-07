@@ -1,13 +1,10 @@
-# React ToDo-list mini project
+# Getting Started with Create React App
 
----
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### Implementation
+## Available Scripts
 
-- Time, weather display
-- Task board create and delete
-- Task Move
-- Light Mode & Dark Mode
+In the project directory, you can run:
 
 ### `npm start`
 

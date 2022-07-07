@@ -1,5 +1,15 @@
-import { createGlobalStyle, ThemeProvider } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { LightTheme } from "./theme";
+
+import {
+  DragDropContext,
+  DragDropContextProps,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { toDoState } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -54,6 +64,7 @@ box-sizing: border-box;
 }
 
 body{
+  
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
     line-height: 1.2;
@@ -68,10 +79,121 @@ a{
 }
 `;
 
+const Wrapper = styled.div`
+  /* height: 150vh; */
+  padding: 10px;
+  border: 1px solid black;
+`;
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+`;
+const WeatherTime = styled.div``;
+const Title = styled.h1``;
+const Options = styled.div``;
+const Main = styled.main`
+  /* display: grid;
+  place-items: center;
+  grid-gap: 30px;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 5rem; */
+
+  /* display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+  gap: 20px; */
+  margin-top: 5rem;
+  display: flex;
+  gap: 20px;
+  div {
+    width: 100%;
+    border: 1px solid black;
+  }
+`;
+const Footer = styled.footer`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border: 1px solid black;
+`;
+
 function App() {
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
+    if (!destination?.droppableId) return;
+
+    // same board
+    if (source.droppableId === destination?.droppableId) {
+      setToDos((prevToDos) => {
+        // {...prevToDos}
+        const boardCopy = [...prevToDos[source.droppableId]];
+        const cutTask = [...boardCopy.splice(source.index, 1)];
+        boardCopy.splice(destination.index, 0, ...cutTask);
+
+        return { ...prevToDos, [source.droppableId]: boardCopy };
+      });
+    }
+
+    // different board
+    if (source.droppableId !== destination?.droppableId) {
+      setToDos((prevToDos) => {
+        const sourceCopy = [...prevToDos[source.droppableId]];
+        const destinationCopy = [...prevToDos[destination.droppableId]];
+
+        const cut = sourceCopy.splice(source.index, 1);
+        destinationCopy.splice(destination.index, 0, ...cut);
+        return {
+          ...prevToDos,
+          [source.droppableId]: sourceCopy,
+          [destination.droppableId]: destinationCopy,
+        };
+      });
+    }
+  };
+
   return (
     <>
       <ThemeProvider theme={LightTheme}>
+        <Wrapper>
+          <Header>
+            <WeatherTime>시간 날씨</WeatherTime>
+            <Title>To Do List</Title>
+            <Options>
+              <form>
+                <input type="text" placeholder="Add Board.." />
+              </form>
+            </Options>
+          </Header>
+          <Main>
+            <DragDropContext onDragEnd={onDragEnd}>
+              {Object.keys(toDos).map((toDo) => (
+                <Droppable key={toDo} droppableId={toDo}>
+                  {(provided, snapshot) => (
+                    <div ref={provided.innerRef}>
+                      {toDos[toDo].map((text, index) => (
+                        <Draggable key={text} index={index} draggableId={text}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                            >
+                              {text}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              ))}
+            </DragDropContext>
+          </Main>
+          {/* <Footer>Footer</Footer> */}
+        </Wrapper>
+
         <GlobalStyle />
       </ThemeProvider>
     </>
