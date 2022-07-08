@@ -115,6 +115,8 @@ const Footer = styled.footer`
   border: 1px solid black;
 `;
 
+const arr = ["qw"];
+
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
@@ -160,8 +162,25 @@ function App() {
           </Header>
           <Main>
             <DragDropContext onDragEnd={onDragEnd}>
-              {Object.keys(toDos).map((toDo) => (
-                <Boards key={toDo} toDo={toDo} toDos={toDos} />
+              {Object.keys(toDos).map((toDo, idx) => (
+                <Droppable key={toDo} droppableId={toDo}>
+                  {(provided) => (
+                    <div ref={provided.innerRef}>
+                      <Draggable index={idx} draggableId={toDo}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.dragHandleProps}
+                            {...provided.draggableProps}
+                          >
+                            {<Boards toDo={toDo} toDos={toDos} />}
+                          </div>
+                        )}
+                      </Draggable>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
               ))}
             </DragDropContext>
           </Main>
