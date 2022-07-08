@@ -11,6 +11,7 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import { toDoState } from "./atoms";
 import Boards from "./components/Boards";
+import Options from "./components/Options";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -92,7 +93,7 @@ const Header = styled.header`
 `;
 const WeatherTime = styled.div``;
 const Title = styled.h1``;
-const Options = styled.div``;
+
 const Main = styled.main`
   /* display: grid;
   place-items: center;
@@ -160,14 +161,9 @@ function App() {
           <Header>
             <WeatherTime>시간 날씨</WeatherTime>
             <Title>To Do List</Title>
-            <Options>
-              <form>
-                <input type="text" placeholder="Add Board.." />
-              </form>
-            </Options>
+            <Options />
           </Header>
           <Main>
-            {" "}
             <DragDropContext onDragEnd={onDragEnd}>
               {Object.keys(toDos).map((toDo) => (
                 <Boards key={toDo} toDo={toDo} toDos={toDos} />

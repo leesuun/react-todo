@@ -9,16 +9,19 @@ interface IBoardProps {
 
 function Boards({ toDos, toDo }: IBoardProps) {
   return (
-    <Droppable droppableId={toDo}>
-      {(provided, snapshot) => (
-        <div ref={provided.innerRef}>
-          {toDos[toDo as any].map((text, index) => (
-            <DraggableCard key={text} text={text} index={index} />
-          ))}
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
+    <div>
+      <h1>{toDo}</h1>
+      <Droppable droppableId={toDo}>
+        {(provided, snapshot) => (
+          <div ref={provided.innerRef}>
+            {toDos[toDo as any].map((text, index) => (
+              <DraggableCard key={text} text={text} index={index} />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </div>
   );
 }
 export default Boards;
