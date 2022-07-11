@@ -1,17 +1,9 @@
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { LightTheme } from "./theme";
 
-import {
-  DragDropContext,
-  DragDropContextProps,
-  Draggable,
-  Droppable,
-  DropResult,
-  DragStart,
-} from "react-beautiful-dnd";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
 import { toDoState } from "./atoms";
-import Boards from "./components/Boards";
 import Options from "./components/Options";
 import BoardContents from "./components/BoardContents";
 import { memo } from "react";

@@ -1,23 +1,25 @@
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { memo } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
 const Card = styled.div`
+  margin-top: 5px;
   height: 30px;
   background-color: white;
   padding: 5px;
   border-radius: 3px;
-  width: 80%;
+  width: 100%;
 `;
 
 interface IDraggableCardProps {
   text: string;
   index: number;
-  dragId: number;
+  boardId: number;
 }
 
-function DraggableCard({ text, index, dragId }: IDraggableCardProps) {
+function DraggableCard({ text, index, boardId }: IDraggableCardProps) {
   return (
-    <Draggable index={index} draggableId={dragId + ""}>
+    <Draggable index={index} draggableId={boardId + ""}>
       {(provided, snapshot) => (
         <Card
           ref={provided.innerRef}
@@ -31,4 +33,4 @@ function DraggableCard({ text, index, dragId }: IDraggableCardProps) {
   );
 }
 
-export default DraggableCard;
+export default memo(DraggableCard);

@@ -1,9 +1,9 @@
 import { FormEvent, memo } from "react";
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IToDo, IToDoState, toDoState } from "../atoms";
+import { IToDoState, toDoState } from "../atoms";
 import DraggableCard from "./DraggableCard";
 
 const Wrapper = styled.div`
@@ -39,10 +39,19 @@ const Board = styled.div`
   border-bottom-right-radius: 10px;
   background-color: #d9d9d9;
   min-height: 200px;
+  align-items: center;
+`;
+
+const Form = styled.form`
+  input {
+    border: none;
+    border-radius: 3px;
+    padding: 3px;
+  }
 `;
 
 interface IBoardProps {
-  toDo: string;
+  boardId: string;
   toDos: IToDoState;
 }
 
@@ -50,7 +59,7 @@ interface IForm {
   task: string;
 }
 
-function Boards({ toDos, toDo }: IBoardProps) {
+function Boards({ toDos, boardId }: IBoardProps) {
   const setToDos = useSetRecoilState(toDoState);
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const onClickBtn = (e: FormEvent<HTMLButtonElement>) => {
@@ -63,10 +72,10 @@ function Boards({ toDos, toDo }: IBoardProps) {
 
   const onValid = ({ task }: IForm) => {
     setToDos((prevToDos) => {
-      const copyTask = [...prevToDos[toDo]];
+      const copyTask = [...prevToDos[boardId]];
 
       copyTask.push({ text: task, id: Date.now() });
-      return { ...prevToDos, [toDo]: copyTask };
+      return { ...prevToDos, [boardId]: copyTask };
     });
     setValue("task", "");
   };
@@ -74,25 +83,27 @@ function Boards({ toDos, toDo }: IBoardProps) {
   return (
     <Wrapper>
       <BoardTitle>
-        <span>{toDo}</span>
-        <DelBtn value={toDo} onClick={onClickBtn}>
+        <span>{boardId}</span>
+        <DelBtn value={boardId} onClick={onClickBtn}>
           ❌
         </DelBtn>
       </BoardTitle>
-      <Droppable droppableId={toDo}>
+      <Droppable droppableId={boardId}>
         {(provided, snapshot) => (
           <Board ref={provided.innerRef}>
-            <form onSubmit={handleSubmit(onValid)}>
+            <Form onSubmit={handleSubmit(onValid)}>
               <input
+                autoComplete="off"
                 type="text"
                 {...register("task", { required: true })}
                 placeholder="add a task.."
               />
-            </form>
-            {toDos[toDo as any].map((toDo, index) => (
+            </Form>
+
+            {toDos[boardId].map((toDo, index) => (
               <DraggableCard
                 key={toDo.id}
-                dragId={toDo.id}
+                boardId={toDo.id}
                 text={toDo.text}
                 index={index}
               />

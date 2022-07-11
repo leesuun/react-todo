@@ -6,7 +6,7 @@ const Trash = styled.div`
   line-height: 50px;
   font-size: 1.5rem;
   border-radius: 50%;
-  margin: 10rem auto 0 auto;
+  margin: 5rem auto 0 auto;
   position: fixed;
   left: 0;
   right: 0;

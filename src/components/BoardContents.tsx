@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { IToDo, IToDoState } from "../atoms";
+import { IToDoState } from "../atoms";
 
 import Boards from "./Boards";
 
@@ -29,7 +29,7 @@ function BoardContents({ toDos }: IBoardConentsProps) {
                   {...provided.dragHandleProps}
                   {...provided.draggableProps}
                 >
-                  <Boards key={toDo} toDo={toDo} toDos={toDos} />
+                  <Boards key={toDo} boardId={toDo} toDos={toDos} />
                 </div>
               )}
             </Draggable>
