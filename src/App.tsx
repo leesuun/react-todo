@@ -15,6 +15,7 @@ import Boards from "./components/Boards";
 import Options from "./components/Options";
 import BoardContents from "./components/BoardContents";
 import { memo } from "react";
+import TrashCan from "./components/TrashCan";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -90,6 +91,8 @@ const Wrapper = styled.div`
 `;
 const Header = styled.header`
   display: flex;
+  flex-wrap: nowrap;
+
   width: 100%;
   justify-content: space-between;
   padding: 30px;
@@ -115,6 +118,7 @@ const Main = styled.main`
   height: 100%;
   /* border: 5px solid black; */
 `;
+
 const Footer = styled.footer`
   width: 100%;
   position: absolute;
@@ -126,18 +130,23 @@ function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
-    console.log(source, destination, draggableId);
+    // delete task
 
-    if (!destination && !Object.keys(toDos).includes(draggableId)) {
+    if (
+      !Object.keys(toDos).includes(draggableId) &&
+      destination?.droppableId === "del"
+    ) {
       setToDos((prevToDos) => {
         const boardCopy = [...prevToDos[source.droppableId]];
         boardCopy.splice(source.index, 1);
         return { ...prevToDos, [source.droppableId]: boardCopy };
       });
+      console.log("s");
+      return;
     }
-
     if (!destination?.droppableId) return;
 
+    // contents move
     if (Object.keys(toDos).includes(draggableId)) {
       setToDos((prevToDos) => {
         const boardCopy = Object.entries({ ...prevToDos });
@@ -154,7 +163,7 @@ function App() {
       setToDos((prevToDos) => {
         // {...prevToDos}
         const boardCopy = [...prevToDos[source.droppableId]];
-        console.log(source);
+
         const cutTask = [...boardCopy.splice(source.index, 1)];
         boardCopy.splice(destination.index, 0, ...cutTask);
 
@@ -191,6 +200,7 @@ function App() {
           <Main>
             <DragDropContext onDragEnd={onDragEnd}>
               <BoardContents toDos={toDos} />
+              <TrashCan />
             </DragDropContext>
           </Main>
           {/* <Footer>Footer</Footer> */}
@@ -203,55 +213,3 @@ function App() {
 }
 
 export default memo(App);
-
-{
-  /* <DragDropContext onDragEnd={onDragEnd}>
-{Object.keys(toDos).map((toDo, idx) => (
-  <Droppable direction="horizontal" key={toDo} droppableId={toDo}>
-    {(provided) => (
-      <div
-        style={{ display: "flex", border: "1px solid black" }}
-        ref={provided.innerRef}
-      >
-        <Draggable index={idx} draggableId={toDo}>
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.dragHandleProps}
-              {...provided.draggableProps}
-            >
-              <Boards key={toDo} toDo={toDo} toDos={toDos} />
-            </div>
-          )}
-        </Draggable>
-        {provided.placeholder}
-      </div>
-    )}
-  </Droppable>
-))}
-</DragDropContext> */
-}
-
-{
-  /* <DragDropContext onDragEnd={onDragEnd}>
-<Droppable direction="horizontal" droppableId="1">
-  {(provided) => (
-    <div ref={provided.innerRef}>
-      {Object.keys(toDos).map((toDo, idx) => {
-        <Draggable draggableId={toDo} index={idx}>
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.dragHandleProps}
-              {...provided.draggableProps}
-            >
-              <Boards key={toDo} toDo={toDo} toDos={toDos} />
-            </div>
-          )}
-        </Draggable>;
-      })}
-    </div>
-  )}
-</Droppable>
-</DragDropContext> */
-}

@@ -1,21 +1,19 @@
 import { memo } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { IToDo } from "../atoms";
+import { IToDo, IToDoState } from "../atoms";
 
 import Boards from "./Boards";
 
 const Wrapper = styled.div`
   display: flex;
-
   padding: 0 5rem;
-
   /* justify-content: center; */
 
   gap: 30px;
 `;
 interface IBoardConentsProps {
-  toDos: IToDo;
+  toDos: IToDoState;
 }
 
 function BoardContents({ toDos }: IBoardConentsProps) {

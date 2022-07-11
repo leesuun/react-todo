@@ -6,16 +6,18 @@ const Card = styled.div`
   background-color: white;
   padding: 5px;
   border-radius: 3px;
+  width: 80%;
 `;
 
 interface IDraggableCardProps {
   text: string;
   index: number;
+  dragId: number;
 }
 
-function DraggableCard({ text, index }: IDraggableCardProps) {
+function DraggableCard({ text, index, dragId }: IDraggableCardProps) {
   return (
-    <Draggable index={index} draggableId={text}>
+    <Draggable index={index} draggableId={dragId + ""}>
       {(provided, snapshot) => (
         <Card
           ref={provided.innerRef}

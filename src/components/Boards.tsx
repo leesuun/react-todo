@@ -1,8 +1,9 @@
 import { FormEvent, memo } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IToDo, toDoState } from "../atoms";
+import { IToDo, IToDoState, toDoState } from "../atoms";
 import DraggableCard from "./DraggableCard";
 
 const Wrapper = styled.div`
@@ -42,11 +43,16 @@ const Board = styled.div`
 
 interface IBoardProps {
   toDo: string;
-  toDos: IToDo;
+  toDos: IToDoState;
+}
+
+interface IForm {
+  task: string;
 }
 
 function Boards({ toDos, toDo }: IBoardProps) {
   const setToDos = useSetRecoilState(toDoState);
+  const { register, handleSubmit, setValue } = useForm<IForm>();
   const onClickBtn = (e: FormEvent<HTMLButtonElement>) => {
     setToDos((prevToDos) => {
       const copyToDos = { ...prevToDos };
@@ -54,6 +60,17 @@ function Boards({ toDos, toDo }: IBoardProps) {
       return { ...copyToDos };
     });
   };
+
+  const onValid = ({ task }: IForm) => {
+    setToDos((prevToDos) => {
+      const copyTask = [...prevToDos[toDo]];
+
+      copyTask.push({ text: task, id: Date.now() });
+      return { ...prevToDos, [toDo]: copyTask };
+    });
+    setValue("task", "");
+  };
+
   return (
     <Wrapper>
       <BoardTitle>
@@ -65,8 +82,20 @@ function Boards({ toDos, toDo }: IBoardProps) {
       <Droppable droppableId={toDo}>
         {(provided, snapshot) => (
           <Board ref={provided.innerRef}>
-            {toDos[toDo as any].map((text, index) => (
-              <DraggableCard key={text} text={text} index={index} />
+            <form onSubmit={handleSubmit(onValid)}>
+              <input
+                type="text"
+                {...register("task", { required: true })}
+                placeholder="add a task.."
+              />
+            </form>
+            {toDos[toDo as any].map((toDo, index) => (
+              <DraggableCard
+                key={toDo.id}
+                dragId={toDo.id}
+                text={toDo.text}
+                index={index}
+              />
             ))}
             {provided.placeholder}
           </Board>
