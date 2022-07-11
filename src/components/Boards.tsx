@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FormEvent, memo } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -37,6 +37,7 @@ const Board = styled.div`
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   background-color: #d9d9d9;
+  min-height: 200px;
 `;
 
 interface IBoardProps {
@@ -74,7 +75,7 @@ function Boards({ toDos, toDo }: IBoardProps) {
     </Wrapper>
   );
 }
-export default Boards;
+export default memo(Boards);
 
 {
   /* <Draggable key={text} index={index} draggableId={text}>

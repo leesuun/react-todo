@@ -7,11 +7,14 @@ import {
   Draggable,
   Droppable,
   DropResult,
+  DragStart,
 } from "react-beautiful-dnd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { toDoState } from "./atoms";
 import Boards from "./components/Boards";
 import Options from "./components/Options";
+import BoardContents from "./components/BoardContents";
+import { memo } from "react";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -65,6 +68,7 @@ border-spacing: 0;
 box-sizing: border-box;
 }
 body{
+
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
     line-height: 1.2;
@@ -81,12 +85,19 @@ a{
 
 const Wrapper = styled.div`
   height: 100%;
+  width: 100%;
   padding: 10px;
-  border: 5px solid red;
 `;
 const Header = styled.header`
   display: flex;
+  width: 100%;
   justify-content: space-between;
+  padding: 30px;
+  position: fixed;
+  top: 0px;
+
+  /* display: flex;
+  justify-content: space-between; */
   /* border: 1px solid black; */
 `;
 const WeatherTime = styled.div``;
@@ -100,11 +111,7 @@ const Title = styled.h1`
 `;
 
 const Main = styled.main`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 5rem;
+  margin-top: 10rem;
   height: 100%;
   /* border: 5px solid black; */
 `;
@@ -115,18 +122,39 @@ const Footer = styled.footer`
   border: 1px solid black;
 `;
 
-const arr = ["qw"];
-
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
+
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
+    console.log(source, destination, draggableId);
+
+    if (!destination && !Object.keys(toDos).includes(draggableId)) {
+      setToDos((prevToDos) => {
+        const boardCopy = [...prevToDos[source.droppableId]];
+        boardCopy.splice(source.index, 1);
+        return { ...prevToDos, [source.droppableId]: boardCopy };
+      });
+    }
+
     if (!destination?.droppableId) return;
+
+    if (Object.keys(toDos).includes(draggableId)) {
+      setToDos((prevToDos) => {
+        const boardCopy = Object.entries({ ...prevToDos });
+        const cutTask = [...boardCopy.splice(source.index, 1)];
+        boardCopy.splice(destination.index, 0, ...cutTask);
+
+        return { ...Object.fromEntries(boardCopy) };
+      });
+      return;
+    }
 
     // same board
     if (source.droppableId === destination?.droppableId) {
       setToDos((prevToDos) => {
         // {...prevToDos}
         const boardCopy = [...prevToDos[source.droppableId]];
+        console.log(source);
         const cutTask = [...boardCopy.splice(source.index, 1)];
         boardCopy.splice(destination.index, 0, ...cutTask);
 
@@ -162,26 +190,7 @@ function App() {
           </Header>
           <Main>
             <DragDropContext onDragEnd={onDragEnd}>
-              {Object.keys(toDos).map((toDo, idx) => (
-                <Droppable key={toDo} droppableId={toDo}>
-                  {(provided) => (
-                    <div ref={provided.innerRef}>
-                      <Draggable index={idx} draggableId={toDo}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
-                            {<Boards toDo={toDo} toDos={toDos} />}
-                          </div>
-                        )}
-                      </Draggable>
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
+              <BoardContents toDos={toDos} />
             </DragDropContext>
           </Main>
           {/* <Footer>Footer</Footer> */}
@@ -193,4 +202,56 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);
+
+{
+  /* <DragDropContext onDragEnd={onDragEnd}>
+{Object.keys(toDos).map((toDo, idx) => (
+  <Droppable direction="horizontal" key={toDo} droppableId={toDo}>
+    {(provided) => (
+      <div
+        style={{ display: "flex", border: "1px solid black" }}
+        ref={provided.innerRef}
+      >
+        <Draggable index={idx} draggableId={toDo}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.dragHandleProps}
+              {...provided.draggableProps}
+            >
+              <Boards key={toDo} toDo={toDo} toDos={toDos} />
+            </div>
+          )}
+        </Draggable>
+        {provided.placeholder}
+      </div>
+    )}
+  </Droppable>
+))}
+</DragDropContext> */
+}
+
+{
+  /* <DragDropContext onDragEnd={onDragEnd}>
+<Droppable direction="horizontal" droppableId="1">
+  {(provided) => (
+    <div ref={provided.innerRef}>
+      {Object.keys(toDos).map((toDo, idx) => {
+        <Draggable draggableId={toDo} index={idx}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.dragHandleProps}
+              {...provided.draggableProps}
+            >
+              <Boards key={toDo} toDo={toDo} toDos={toDos} />
+            </div>
+          )}
+        </Draggable>;
+      })}
+    </div>
+  )}
+</Droppable>
+</DragDropContext> */
+}
