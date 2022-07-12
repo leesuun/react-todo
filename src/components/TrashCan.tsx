@@ -1,4 +1,4 @@
-import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
 const Trash = styled.div<ITrashCanProps>`

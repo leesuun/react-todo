@@ -19,7 +19,7 @@ interface IBoardConentsProps {
 function BoardContents({ toDos }: IBoardConentsProps) {
   return (
     <Droppable type={"BoardContents"} direction="horizontal" droppableId="1">
-      {(provided, snapshot) => (
+      {(provided) => (
         <Wrapper ref={provided.innerRef}>
           {Object.keys(toDos).map((toDo, idx) => (
             <Draggable key={toDo} draggableId={toDo} index={idx}>
