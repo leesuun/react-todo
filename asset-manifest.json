@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/leesuun/react-todo/static/js/main.d35fbde0.js",
+    "index.html": "/leesuun/react-todo/index.html",
+    "main.d35fbde0.js.map": "/leesuun/react-todo/static/js/main.d35fbde0.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d35fbde0.js"
+  ]
+}
