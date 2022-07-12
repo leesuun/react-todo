@@ -192,10 +192,9 @@ function App() {
           <Header>
             <WeatherTime>
               <Clock
-                style={{ "font-size": "20px", "font-weight": "500" }}
+                style={{ fontSize: "20px", fontWeight: "500" }}
                 format={"YYYY.MM.DD HH:mm:ss"}
                 ticking={true}
-                timezone={"KR/Pacific"}
               />
             </WeatherTime>
             <Title>To Do List</Title>
