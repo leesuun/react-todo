@@ -20,15 +20,22 @@ interface IDraggableCardProps {
 function DraggableCard({ text, index, boardId }: IDraggableCardProps) {
   return (
     <Draggable index={index} draggableId={boardId + ""}>
-      {(provided, snapshot) => (
-        <Card
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {text}
-        </Card>
-      )}
+      {(provided, snapshot) => {
+        const style = {
+          backgroundColor: snapshot.isDragging ? "#BBDEFB" : "white",
+          ...provided.draggableProps.style,
+        };
+        return (
+          <Card
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={style}
+          >
+            {text}
+          </Card>
+        );
+      }}
     </Draggable>
   );
 }

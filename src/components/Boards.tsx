@@ -29,7 +29,7 @@ const DelBtn = styled.button`
   top: 5px;
 `;
 
-const Board = styled.div`
+const Board = styled.div<IBoardAreaProps>`
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -37,9 +37,20 @@ const Board = styled.div`
   padding: 15px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  background-color: #d9d9d9;
+
   min-height: 200px;
   align-items: center;
+
+  background-color: ${(props) => {
+    return props.isDraggingOver
+      ? "#cbd2d6"
+      : props.isDraggingFromThis
+      ? "#b2bec3"
+      : "#d9d9d9";
+  }};
+  flex-grow: 1;
+  padding: 20px;
+  transition: background-color 0.3s ease-in-out;
 `;
 
 const Form = styled.form`
@@ -49,6 +60,11 @@ const Form = styled.form`
     padding: 3px;
   }
 `;
+
+interface IBoardAreaProps {
+  isDraggingFromThis: boolean;
+  isDraggingOver: boolean;
+}
 
 interface IBoardProps {
   boardId: string;
@@ -90,7 +106,11 @@ function Boards({ toDos, boardId }: IBoardProps) {
       </BoardTitle>
       <Droppable droppableId={boardId}>
         {(provided, snapshot) => (
-          <Board ref={provided.innerRef}>
+          <Board
+            isDraggingOver={snapshot.isDraggingOver}
+            isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+            ref={provided.innerRef}
+          >
             <Form onSubmit={handleSubmit(onValid)}>
               <input
                 autoComplete="off"

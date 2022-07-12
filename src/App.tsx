@@ -1,6 +1,7 @@
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { LightTheme } from "./theme";
 
+import Clock from "react-live-clock";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import { toDoState } from "./atoms";
@@ -79,25 +80,18 @@ a{
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
-  padding: 10px;
 `;
 const Header = styled.header`
   display: flex;
   flex-wrap: nowrap;
-
   width: 100%;
   justify-content: space-between;
   padding: 30px;
   position: fixed;
   top: 0px;
-
-  /* display: flex;
-  justify-content: space-between; */
-  /* border: 1px solid black; */
 `;
 const WeatherTime = styled.div``;
 const Title = styled.h1`
-  margin-left: 7rem;
   font-size: 50px;
   font-weight: 500;
   text-shadow: 1px 1px 2px black;
@@ -113,9 +107,20 @@ const Main = styled.main`
 
 const Footer = styled.footer`
   width: 100%;
-  position: absolute;
+  height: 100px;
+  position: fixed;
   bottom: 0;
-  border: 1px solid black;
+  background-color: inherit;
+
+  p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-weight: 500;
+    line-height: 100px;
+    text-align: center;
+    text-justify: center;
+    color: black;
+  }
 `;
 
 function App() {
@@ -185,7 +190,14 @@ function App() {
       <ThemeProvider theme={LightTheme}>
         <Wrapper>
           <Header>
-            <WeatherTime>시간 날씨</WeatherTime>
+            <WeatherTime>
+              <Clock
+                style={{ "font-size": "20px", "font-weight": "500" }}
+                format={"YYYY.MM.DD HH:mm:ss"}
+                ticking={true}
+                timezone={"KR/Pacific"}
+              />
+            </WeatherTime>
             <Title>To Do List</Title>
             <Options />
           </Header>
@@ -195,7 +207,9 @@ function App() {
               <TrashCan />
             </DragDropContext>
           </Main>
-          {/* <Footer>Footer</Footer> */}
+          <Footer>
+            <p>Beautiful Trello Clone!!</p>
+          </Footer>
         </Wrapper>
 
         <GlobalStyle />
