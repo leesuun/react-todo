@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/leesuun/react-todo/static/js/main.d35fbde0.js",
-    "index.html": "/leesuun/react-todo/index.html",
-    "main.d35fbde0.js.map": "/leesuun/react-todo/static/js/main.d35fbde0.js.map"
+    "main.js": "/react-todo/static/js/main.5a390a05.js",
+    "index.html": "/react-todo/index.html",
+    "main.5a390a05.js.map": "/react-todo/static/js/main.5a390a05.js.map"
   },
   "entrypoints": [
-    "static/js/main.d35fbde0.js"
+    "static/js/main.5a390a05.js"
   ]
 }
